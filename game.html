@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TRPGキャラメーカー</title>
+
+<style>
+
+body{
+  background:#eee;
+  font-family:sans-serif;
+  margin:0;
+}
+
+/* 右下戻るボタン */
+#backButton{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  padding:12px 18px;
+  font-size:16px;
+  border-radius:10px;
+  border:none;
+  background:black;
+  color:white;
+  cursor:pointer;
+  display:none;
+}
+.danger{
+  background:#ff6b6b;
+  color:white;
+  border:none;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+/* 紙レイアウト */
+.paper{
+  background:white;
+  max-width:700px;
+  margin:40px auto;
+  padding:40px;
+  border-radius:12px;
+  box-shadow:0 0 15px rgba(0,0,0,0.15);
+}
+
+label{
+  font-weight:bold;
+  display:block;
+  margin-top:15px;
+}
+
+input, textarea{
+  width:100%;
+  padding:8px;
+  margin-top:5px;
+  border-radius:6px;
+  border:1px solid #ccc;
+  font-size:14px;
+}
+
+textarea{
+  min-height:70px;
+  resize:vertical;
+}
+
+/* 閲覧モード */
+.viewMode input,
+.viewMode textarea{
+  border:none;
+  background:transparent;
+  pointer-events:none;
+}
+
+/* 印刷用 */
+@media print{
+  button,#backButton{
+    display:none;
+  }
+  body{
+    background:white;
+  }
+  .paper{
+    box-shadow:none;
+    margin:0;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =====================
+     スタート画面
+===================== -->
+<div id="startScreen" style="text-align:center;margin-top:100px;">
+  <h1>TRPGキャラメーカー</h1>
+  <button onclick="goSave()">START</button>
+</div>
+
+<!-- =====================
+     セーブ画面
+===================== -->
+<div id="saveScreen" style="display:none;text-align:center;margin-top:80px;">
+  <h2>セーブデータ</h2>
+
+  <button onclick="loadSlot(1)">データ1</button>
+  <button onclick="loadSlot(2)">データ2</button>
+  <button onclick="loadSlot(3)">データ3</button>
+</div>
+
+<!-- =====================
+     プロフィール画面
+===================== -->
+<div id="profileScreen" style="display:none;">
+
+<div class="paper">
+
+<h2>プロフィール</h2>
+
+<h3>基本情報</h3>
+
+<label>名前</label>
+<input id="nameInput">
+
+<label>年齢</label>
+<input id="ageInput">
+
+<label>血液型</label>
+<input id="ketuInput">
+
+<label>誕生日</label>
+<input id="tanInput">
+
+<h3>人物像</h3>
+
+<label>他人から見た性格</label>
+<textarea id="personality"></textarea>
+
+<label>本当の見た性格</label>
+<textarea id="shinnopersonality"></textarea>
+
+<label>過去</label>
+<textarea id="history"></textarea>
+
+<label>秘密</label>
+<textarea id="secret"></textarea>
+
+<h3>好み</h3>
+
+<label>好きなもの</label>
+<textarea id="like"></textarea>
+
+<label>苦手なもの</label>
+<textarea id="dislike"></textarea>
+
+<label>好きな食べ物</label>
+<textarea id="tabelike"></textarea>
+
+<label>苦手な食べ物</label>
+<textarea id="tabedislike"></textarea>
+
+<label>趣味</label>
+<textarea id="syumi"></textarea>
+
+<label>好きな教科</label>
+<textarea id="kyoukalike"></textarea>
+
+<label>苦手な教科</label>
+<textarea id="kyoukadislike"></textarea>
+
+<label>好きな動物</label>
+<textarea id="doubutulike"></textarea>
+
+<label>好きな色</label>
+<textarea id="colorlike"></textarea>
+
+<label>好きなおにぎりの具は？</label>
+<textarea id="onigiri"></textarea>
+
+<label>好きなお寿司のネタは？</label>
+<textarea id="sushi"></textarea>
+
+<label>好きな卵焼きの味付けは？</label>
+<textarea id="tamago"></textarea>
+
+<label>好きなラーメンの味は？</label>
+<textarea id="men"></textarea>
+
+<label>よく飲むお酒は？</label>
+<textarea id="sake"></textarea>
+
+<label>好きなおつまみ</label>
+<textarea id="tumami"></textarea>
+
+
+<hr>
+
+<h3>プロフィール詳細（Q&A）</h3>
+
+<label>第一印象</label>
+<textarea id="firstImpression"></textarea>
+
+<label>長所</label>
+<textarea id="strength"></textarea>
+
+<label>短所</label>
+<textarea id="weakness"></textarea>
+
+<label>利き手は？</label>
+<textarea id="te"></textarea>
+
+<label>家族構成はは？</label>
+<textarea id="kazoku"></textarea>
+
+
+<label>大切にしているもの</label>
+<textarea id="important"></textarea>
+
+<label>人には言えない秘密</label>
+<textarea id="secretDetail"></textarea>
+
+<label>将来どうなりたい？</label>
+<textarea id="future"></textarea>
+
+<label>行きたい場所は？</label>
+<textarea id="basyo"></textarea>
+
+<label>今一番欲しいものは？</label>
+<textarea id="hoshi"></textarea>
+
+<label>座右の銘は？</label>
+<textarea id="zayuu"></textarea>
+
+
+
+<hr>
+
+<h3>IF？（Q&A）</h3>
+
+<label>なんでも一つ能力を与えられたら何の能力がいい？</label>
+<textarea id="nou"></textarea>
+
+<label>毎月10万円振り込まれるなら、何に使う？</label>
+<textarea id="kane"></textarea>
+
+<label>一度だけタイムスリップできるならいつ？</label>
+<textarea id="taimu"></textarea>
+
+<label>あと一年しか生きられなかったら何をする？</label>
+<textarea id="iti"></textarea>
+
+<label>もし一つだけ願いが叶うなら？</label>
+<textarea id="negai"></textarea>
+
+<label>もし生まれ変わるなら？</label>
+<textarea id="reborn"></textarea>
+
+<label>初給料でなにした？</label>
+<textarea id="kyuuryou"></textarea>
+
+<label>幸せを感じる瞬間は？</label>
+<textarea id="shiawase"></textarea>
+
+<label>魔法が使えたら？</label>
+<textarea id="mahou"></textarea>
+
+<label>一か月休みなら？</label>
+<textarea id="yasumi"></textarea>
+
+
+<br><br>
+
+<button onclick="saveProfile()">保存</button>
+<button onclick="toggleViewMode()">閲覧モード</button>
+<button onclick="printProfile()">PDF</button>
+<button onclick="resetProfile()" class="danger">初期化</button>
+
+<p id="showName"></p>
+
+</div>
+</div>
+
+<!-- 戻る -->
+<button id="backButton" onclick="handleBack()">← 戻る</button>
+
+<script src="script.js"></script>
+
+</body>
+</html>
